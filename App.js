@@ -1,20 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import ToggleButton from './src/components/ToggleButton';
 
-export default function App() {
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+
+  const togglePage = () => {
+    setCurrentPage(currentPage === 'home' ? 'about' : 'home');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <div className="App">
+      <ToggleButton handleClick={togglePage} currentPage={currentPage} />
+      {currentPage === 'home' ? <HomePage /> : <AboutPage />}
+    </div>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
