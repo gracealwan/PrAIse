@@ -1,10 +1,22 @@
 import React from 'react';
+import {Typography, Box, TextField, Button} from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 
-const ToggleButton = ({ handleClick, currentPage }) => {
+const useStyles = makeStyles()({
+  button: {
+      fontWeight: 'bold',
+      marginRight: 20,
+  },
+
+});
+
+const ToggleButton = ({ handleClick, name }) => {
+  const {classes } = useStyles();
+
   return (
-    <button onClick={handleClick}>
-      {currentPage === 'home' ? 'About' : 'Home'}
-    </button>
+    <Button variant="contained" className={classes.button} onClick={handleClick}>
+      {name}
+    </Button>
   );
 };
 

@@ -12,15 +12,15 @@ const useStyles = makeStyles()({
 
 });
 
-const HomePage = () => {
+const ActionItems = () => {
   const {classes } = useStyles();
 
   return (
     <Box className={classes.container}>
-      <Typography variant='h4'>Home Page</Typography>
-      <Typography>im assuming we should make this blank?</Typography>
+      <Typography variant='h4'>Action Items</Typography>
+      <Typography>insert the content of the ActionItems page.</Typography>
     </Box>
   );
 };
 
-export default HomePage;
+export default ActionItems;
