@@ -12,7 +12,7 @@ import jsonData from './tokens.json';
 const useStyles = makeStyles()({
   container: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       padding: 50,
       fontFamily: 'sans-serif',
   },

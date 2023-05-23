@@ -57,16 +57,44 @@ function generatePastelColors(count, color1, color2) {
   return colorRange;
 }
 
+function generateColorsArray(count, type) {
+  const colorRange = [];
+  var options = ["rgb(253, 244, 170)",
+  "rgb(247, 195, 138)",
+  "rgb(241, 150, 112)"];
+  if (type == 'creative') {
+    options = [
+      "rgb(240, 160, 188)",
+      "rgb(236, 181, 183)",
+      "rgb(221, 205, 239)",
+      "rgb(158, 146, 223)"
+    ];
+  } else if (type == 'objective') {
+    options = [
+    "rgb(220, 230, 81)",
+    "rgb(162, 216, 118)",
+    "rgb(130, 218, 217)",
+    
+  ]
+  }; 
+  for (let i = 0; i <= count; i++) {
+    var cur_color = options[i % 4]; 
+    colorRange.push(cur_color);
+  }
+  return colorRange;
+}
+
 
 const ActionItems = (props) => {
   const {classes } = useStyles();
   const [creativeList, setCreativeList] = useState(Object.values(props.itemsList['creative']));
   const [objList, setObjList] = useState(Object.values(props.itemsList['objective']));
-  const [alignment, setAlignment] = useState("center");
+  const [alignment, setAlignment] = useState(null);
 
   function highlightSubstring(fb, textList, color1, color2, listType) {
     let updatedFb = fb;
-    const colors = generatePastelColors(textList.length, color1, color2);
+    // const colors = generatePastelColors(textList.length, color1, color2);
+    const colors = generateColorsArray(textList.length, listType); 
     textList.forEach((searchString, i) => {
       const regex = new RegExp(searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
       updatedFb = updatedFb.replace(regex, match => `<mark style="background:${colors[i]}"><strong>${match}</strong></mark>`);
@@ -116,9 +144,9 @@ const ActionItems = (props) => {
           <ToggleButton value="left" aria-label="left aligned">
             Creative
           </ToggleButton>
-          <ToggleButton value="center" aria-label="centered">
+          {/* <ToggleButton value="center" aria-label="centered">
             All
-          </ToggleButton>
+          </ToggleButton> */}
           <ToggleButton value="right" aria-label="right aligned">
             Objective
           </ToggleButton>

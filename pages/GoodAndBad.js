@@ -17,7 +17,9 @@ const useStyles = makeStyles()({
   },
   goodbadcontainer: {
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center', // Align the boxes center horizontally
+    marginTop: 10,
   },
   headercontainer: {
     display: 'flex',
@@ -48,7 +50,6 @@ function generatePastelColors(count, color1, color2) {
   const startColor = tinycolor(color1);
   const endColor = tinycolor(color2);
   const colorRange = [];
-
   for (let i = 0; i <= count; i++) {
     const color = tinycolor.mix(startColor, endColor, i * (100 / count));
     colorRange.push(color.toHexString());
@@ -57,18 +58,51 @@ function generatePastelColors(count, color1, color2) {
   return colorRange;
 }
 
+function generateColorsArray(count, type) {
+  const colorRange = [];
+  var options = ["rgb(253, 244, 170)",
+  "rgb(247, 195, 138)",
+  "rgb(241, 150, 112)"];
+  if (type == 'positive') {
+    options = [
+    "rgb(248, 204, 183)",
+    "rgb(253, 244, 170)",
+    "rgb(247, 195, 138)",
+    "rgb(241, 150, 112)",
+    "rgb(220, 230, 81)"];
+  } else if (type == 'negative') {
+    options = [
+    "rgb(185, 152, 219 )", 
+    "rgb(158, 146, 223)",
+    "rgb(97, 176, 249)",
+    "rgb(154, 214, 251)",
+    "rgb(130, 218, 217 )"
+    
+  ]
+    
+  }; 
+  for (let i = 0; i <= count; i++) {
+    var cur_color = options[i % 5]; 
+    colorRange.push(cur_color);
+  }
+  return colorRange;
+}
+
 
 const GoodAndBad = (props) => {
   const {classes } = useStyles();
   const [creativeList, setCreativeList] = useState(Object.values(props.itemsList['positive']));
   const [objList, setObjList] = useState(Object.values(props.itemsList['negative']));
-  const [alignment, setAlignment] = useState("center");
+  const [alignment, setAlignment] = useState(null);
 
   function highlightSubstring(fb, textList, color1, color2, listType) {
     let updatedFb = fb;
-    const colors = generatePastelColors(textList.length, color1, color2);
+    //const colors = generatePastelColors(textList.length, color1, color2);
+    const colors = generateColorsArray(textList.length, listType); 
+    console.log("colors: " + colors);
     textList.forEach((searchString, i) => {
       const regex = new RegExp(searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      console.log("color at i: ", colors[i]);
       updatedFb = updatedFb.replace(regex, match => `<mark style="background:${colors[i]}"><strong>${match}</strong></mark>`);
     });
     let list = listType == "positive"? creativeList : objList;
@@ -114,9 +148,9 @@ const GoodAndBad = (props) => {
             <ToggleButton value="left" aria-label="left aligned">
               Positive
             </ToggleButton>
-            <ToggleButton value="center" aria-label="centered">
+            {/* <ToggleButton value="center" aria-label="centered">
               All
-            </ToggleButton>
+            </ToggleButton> */}
             <ToggleButton value="right" aria-label="right aligned">
               Negative
             </ToggleButton>
