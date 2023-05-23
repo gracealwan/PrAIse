@@ -29,9 +29,15 @@ const useStyles = makeStyles()({
     marginTop: 10,
     marginRight: 10,
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 8,
+    lineHeight: 1.5,
+    borderColor: 'lightgrey',
     borderWidth: 1,
-    borderStyle: 'solid'
+    borderStyle: 'solid',
+    fontFamily: 'sans-serif',
+  },
+  listItem: {
+    marginBottom: 10
   }
 
 });
@@ -123,14 +129,14 @@ const ActionItems = (props) => {
           <Box className={classes.column} style={{ visibility: (alignment == "left" || alignment == "center")? 'visible':'hidden' }} >
               <Typography variant='h6'>Creative</Typography>
               <ul>
-                {creativeList.map(item => <li>{item}</li>)}
+                {creativeList.map(item => <li className={classes.listItem}>{item}</li>)}
               </ul>
           </Box>
     
           <Box className={classes.column}  style={{ visibility: (alignment == "right" || alignment == "center")? 'visible':'hidden' }}>
               <Typography variant='h6'>Objective</Typography>
               <ul>
-                {objList.map(item => <li>{item}</li>)}
+                {objList.map(item => <li className={classes.listItem}>{item}</li>)}
               </ul>
           </Box>
       </Box>

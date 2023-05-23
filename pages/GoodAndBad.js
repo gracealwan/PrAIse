@@ -29,9 +29,15 @@ const useStyles = makeStyles()({
     marginTop: 10,
     marginRight: 10,
     padding: 10,
-    borderRadius: 10,
+    fontFamily: 'sans-serif',
+    lineHeight: 1.4,
+    borderRadius: 8,
+    borderColor: 'lightgrey',
     borderWidth: 1,
     borderStyle: 'solid'
+  },
+  listItem: {
+    marginBottom: 10
   }
 
 });
@@ -121,14 +127,14 @@ const GoodAndBad = (props) => {
             <Box className={classes.column} style={{ visibility: (alignment == "left" || alignment == "center")? 'visible':'hidden' }} >
                 <Typography variant='h6'>Positive</Typography>
                 <ul>
-                  {creativeList.map(item => <li>{item}</li>)}
+                  {creativeList.map(item => <li className={classes.listItem}>{item}</li>)}
                 </ul>
             </Box>
       
             <Box className={classes.column}  style={{ visibility: (alignment == "right" || alignment == "center")? 'visible':'hidden' }}>
                 <Typography variant='h6'>Negative</Typography>
                 <ul>
-                  {objList.map(item => <li>{item}</li>)}
+                  {objList.map(item => <li className={classes.listItem}>{item}</li>)}
                 </ul>
             </Box>
         </Box>

@@ -10,11 +10,11 @@ const useStyles = makeStyles()({
 
 });
 
-const ToggleButton = ({ handleClick, name }) => {
+const ToggleButton = ({disabled, handleClick, name }) => {
   const {classes } = useStyles();
 
   return (
-    <Button variant="contained" className={classes.button} onClick={handleClick}>
+    <Button disabled={!disabled} variant="contained" className={classes.button} onClick={handleClick}>
       {name}
     </Button>
   );
