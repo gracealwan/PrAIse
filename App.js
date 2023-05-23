@@ -14,13 +14,22 @@ const useStyles = makeStyles()({
       display: 'flex',
       flexDirection: 'row',
       padding: 50,
+      width: "95vw",
       fontFamily: 'sans-serif',
   },
   buttonContainer: {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
-    margin: 20
+    flex:3,
+    alignItems: 'center',
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40
   },
   textHolder: {
     display: 'flex',
@@ -30,17 +39,23 @@ const useStyles = makeStyles()({
   input: {
     width: '40%',
   },
-  title: {
+  logo:{
     fontSize: 40,
+  },
+  title: {
+    fontSize: 32,
     paddingBottom: 20,
+    flex:1
   },
   highlightedContainer: {
+    flex:3,
+    marginLeft:5,
     fontFamily: 'sans-serif',
     lineHeight: 1.7,
   },
-  // highlighted: {
-  //   backgroundColor: #0000,
-  // }
+  display: {
+    flexGrow:4,
+  }
 
 });
 
@@ -159,23 +174,26 @@ const App = () => {
   return (
     <div className="App">
       <Box className={classes.container}>
-        <Typography className={classes.title} variant="title">PrAIse: Feedback delivered how you want it</Typography>
+        <Typography className={classes.title} variant="title"><strong className={classes.logo}>PrAIse</strong>: Feedback delivered how you want it</Typography>
         <Box className={classes.highlightedContainer}>
           <div dangerouslySetInnerHTML={{ __html: feedb }} />
         </Box>
         
         <Box className={classes.buttonContainer}>
-          <ToggleButton disabled={openAIfinished} handleClick={async () => {
-            togglePageActionItems();
-            
-          }
-          } name={"Generate Action Items"} />
-          <ToggleButton disabled={openAIfinished} handleClick={togglePageGoodAndBad} name={"Give me the main points"} />
+          <Box className={classes.buttons}>
+            <ToggleButton disabled={openAIfinished} handleClick={async () => {
+              togglePageActionItems();
+              
+            }
+            } name={"Generate Action Items"} />
+            <ToggleButton disabled={openAIfinished} handleClick={togglePageGoodAndBad} name={"Give me the main points"} />
+          </Box>
+          <div className={classes.display}>
+            {currentPage === 'Home' && <HomePage />}
+            {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} />}
+            {currentPage === 'GoodBad' && <GoodAndBad  itemsList={goodBadListData} originalFb={originalFb} setFeedb={setFeedb} />}
+          </div>
         </Box>
-        
-        {currentPage === 'Home' && <HomePage />}
-        {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} />}
-        {currentPage === 'GoodBad' && <GoodAndBad  itemsList={goodBadListData} originalFb={originalFb} setFeedb={setFeedb} />}
       </Box>
       
     </div>

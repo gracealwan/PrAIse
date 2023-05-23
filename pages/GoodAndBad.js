@@ -10,36 +10,37 @@ import {Button} from '@mui/material';
 
 const useStyles = makeStyles()({
   container: {
-      display: 'flex',
-      flexDirection: 'column',
-      width: "100vw",
-      marginTop: 20,
-  },
-  goodbadcontainer: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center', // Align the boxes center horizontally
-    marginTop: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   headercontainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    alignItems: 'center',
+    flex:7
   },
   column: {
-    width: '45%',
-    marginTop: 10,
-    marginRight: 10,
+    marginLeft: 80,
+    marginRight: 80,
     padding: 10,
-    fontFamily: 'sans-serif',
-    lineHeight: 1.4,
     borderRadius: 8,
+    lineHeight: 1.5,
     borderColor: 'lightgrey',
     borderWidth: 1,
-    borderStyle: 'solid'
+    borderStyle: 'solid',
+    fontFamily: 'sans-serif',
   },
   listItem: {
     marginBottom: 10
+  },
+  header: {
+    marginRight: 20,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  goodbadcontainer: {
+    flex:4
   }
 
 });
@@ -93,7 +94,7 @@ const GoodAndBad = (props) => {
   const {classes } = useStyles();
   const [creativeList, setCreativeList] = useState(Object.values(props.itemsList['positive']));
   const [objList, setObjList] = useState(Object.values(props.itemsList['negative']));
-  const [alignment, setAlignment] = useState(null);
+  const [alignment, setAlignment] = useState('left');
 
   function highlightSubstring(fb, textList, color1, color2, listType) {
     let updatedFb = fb;
@@ -137,41 +138,43 @@ const GoodAndBad = (props) => {
 
   return (
     <Box className={classes.container}>
-        <Box className={classes.headercontainer}>
-          <Typography variant='h4'>Feedback Summary</Typography>
-          <ToggleButtonGroup
-            value={alignment}
-            exclusive
-            onChange={(event, value) => setAlignment(value)}
-            aria-label="text alignment"
-          >
-            <ToggleButton value="left" aria-label="left aligned">
-              Positive
-            </ToggleButton>
-            {/* <ToggleButton value="center" aria-label="centered">
-              All
-            </ToggleButton> */}
-            <ToggleButton value="right" aria-label="right aligned">
-              Negative
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
+      <Box className={classes.headercontainer}>
+        <Typography className={classes.header} variant='h4'>FB Summary</Typography>
+        <ToggleButtonGroup
+          value={alignment}
+          exclusive
+          onChange={(event, value) => {if(value!=null) setAlignment(value)}}
+          aria-label="text alignment"
+        >
+          <ToggleButton value="left" aria-label="left aligned">
+            Positive
+          </ToggleButton>
+          {/* <ToggleButton value="center" aria-label="centered">
+            All
+          </ToggleButton> */}
+          <ToggleButton value="right" aria-label="right aligned">
+            Negative
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
         <Box className={classes.goodbadcontainer}>
 
-            <Box className={classes.column} style={{ visibility: (alignment == "left" || alignment == "center")? 'visible':'hidden' }} >
-                <Typography variant='h6'>Positive</Typography>
-                <ul>
-                  {creativeList.map(item => <li className={classes.listItem}>{item}</li>)}
-                </ul>
-            </Box>
+          {(alignment == "left" || alignment == "center") && 
+          <Box className={classes.column}>
+          <Typography variant='h6'>Positive</Typography>
+          <ul>
+            {creativeList.map(item => <li className={classes.listItem}>{item}</li>)}
+          </ul>
+          </Box>}
       
-            <Box className={classes.column}  style={{ visibility: (alignment == "right" || alignment == "center")? 'visible':'hidden' }}>
+          {(alignment == "right" || alignment == "center") && <Box className={classes.column}>
                 <Typography variant='h6'>Negative</Typography>
                 <ul>
                   {objList.map(item => <li className={classes.listItem}>{item}</li>)}
                 </ul>
-            </Box>
+          </Box>}
         </Box>
+
     </Box>
   );
 };

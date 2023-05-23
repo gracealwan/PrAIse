@@ -6,7 +6,6 @@ const useStyles = makeStyles()({
   container: {
       display: 'flex',
       flexDirection: 'column',
-      width: "100vw",
       marginTop: 20,
   },
 
@@ -15,12 +14,7 @@ const useStyles = makeStyles()({
 const HomePage = () => {
   const {classes } = useStyles();
 
-  return (
-    <Box className={classes.container}>
-      <Typography variant='h4'>Home Page</Typography>
-      <Typography>im assuming we should make this blank?</Typography>
-    </Box>
-  );
+  return;
 };
 
 export default HomePage;

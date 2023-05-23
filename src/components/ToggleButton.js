@@ -6,7 +6,8 @@ const useStyles = makeStyles()({
   button: {
       fontWeight: 'bold',
       marginRight: 20,
-      width: 300,
+      marginLeft: 20,
+      width: 180,
       height: 70, 
   },
 
