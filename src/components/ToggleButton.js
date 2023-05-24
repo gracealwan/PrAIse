@@ -9,6 +9,8 @@ const useStyles = makeStyles()({
       marginLeft: 20,
       width: 180,
       height: 70, 
+      alignContent: 'center', 
+      justifyContent: 'center',
   },
 
 });

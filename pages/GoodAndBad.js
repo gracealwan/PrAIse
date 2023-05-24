@@ -35,6 +35,7 @@ const useStyles = makeStyles()({
     marginBottom: 10
   },
   header: {
+    marginLeft: 80,
     marginRight: 20,
     marginBottom: 20,
     marginTop: 20,
@@ -139,21 +140,22 @@ const GoodAndBad = (props) => {
   return (
     <Box className={classes.container}>
       <Box className={classes.headercontainer}>
-        <Typography className={classes.header} variant='h4'>FB Summary</Typography>
+        <Typography className={classes.header} variant='h4'>Feedback Summary</Typography>
         <ToggleButtonGroup
           value={alignment}
+          fullWidth='50'
           exclusive
           onChange={(event, value) => {if(value!=null) setAlignment(value)}}
           aria-label="text alignment"
         >
           <ToggleButton value="left" aria-label="left aligned">
-            Positive
+            Continue
           </ToggleButton>
           {/* <ToggleButton value="center" aria-label="centered">
             All
           </ToggleButton> */}
           <ToggleButton value="right" aria-label="right aligned">
-            Negative
+            Improve
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>

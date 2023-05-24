@@ -35,6 +35,7 @@ const useStyles = makeStyles()({
     marginBottom: 10
   },
   header: {
+    marginLeft: 80,
     marginRight: 20,
     marginBottom: 20,
     marginTop: 20,
@@ -100,10 +101,13 @@ const ActionItems = (props) => {
     const colors = generateColorsArray(textList.length, listType); 
     textList.forEach((searchString, i) => {
       const regex = new RegExp(searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-      updatedFb = updatedFb.replace(regex, match => `<mark style="background:${colors[i]}"><strong>${match}</strong></mark>`);
+      //updatedFb = updatedFb.replace(regex, match => `<mark style= "background:${colors[i]}", "color: red"><strong>${match}</strong></mark>`);
+      //updatedFb = updatedFb.replace(regex, match => `<mark style= "background:${colors[i]}", "color: red"><strong>${match}</strong></mark>`);
+      updatedFb = updatedFb.replace(regex, match => `<mark style="background:${colors[i]}; color:black;">${match}</mark>`);
+
     });
     let list = listType == "creative"? creativeList : objList;
-    let newList = list.map((item,i) => <mark style={{background:colors[i]}}>{item}</mark>)
+    let newList = list.map((item,i) => <mark style={{background:colors[i], color:"black"}}>{item}</mark>)
     listType == "creative"? setCreativeList(newList):setObjList(newList);
     return updatedFb;
   }
@@ -139,19 +143,20 @@ const ActionItems = (props) => {
         <Box className={classes.headercontainer}>
           <Typography className={classes.header} variant='h4'>Action Items</Typography>
           <ToggleButtonGroup
+            fullWidth='50'
             value={alignment}
             exclusive
             onChange={(event, value) => {if (value != null) setAlignment(value)}}
             aria-label="text alignment"
           >
             <ToggleButton value="left" aria-label="left aligned">
-              Creative
+              When you're feeling creative
             </ToggleButton>
             {/* <ToggleButton value="center" aria-label="centered">
               All
             </ToggleButton> */}
             <ToggleButton value="right" aria-label="right aligned">
-              Objective
+              When you're not {"\n"}             
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>
