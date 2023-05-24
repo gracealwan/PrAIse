@@ -53,6 +53,9 @@ const useStyles = makeStyles()({
     fontFamily: 'sans-serif',
     lineHeight: 1.7,
   },
+  maintext: {
+    color: 'lightgrey'
+  },
   display: {
     flexGrow:4,
   }
@@ -62,10 +65,10 @@ const useStyles = makeStyles()({
 const App = () => {
   const token = jsonData.openAI; 
   const [currentPage, setCurrentPage] = useState('Home');
-  const [text, setText] = useState("Default feedback");
   const [openAIfinished, setOpenAIfinished] = useState(true);
   const feedback = "I really liked how you walked us through your analysis. There are several interesting themes that you've uncovered that could either motivate your project or be used as guidelines. For scoping, I might recommend focusing on the most interesting one you'd like to explore further and revisiting the others to see how they might inform designs about this focus. Nice job gathering the perspectives and experiences from two users on challenges in the workplace! We did notice that both of your participants were PMs who joined the company recently. Totally understand that it's hard to recruit users in this space, so instead, it's a good idea to also include some sort of explicit reflection on how that might have shaped your needfinding. Not sure if being hired recently would affect things, but PMs might be especially concerned about progress and feedback, so might scope this as aimed for people who are managing processes or projects. Nice job synthesizing what you learned from each participant! Very clear steps on how your team went from the needfinding notes to the POV, which also surfaced several potential ideas to be brainstormed on. The concepts around direct feedback as well as up-to-date progress are really interesting areas to explore. One thing that didn't feel as clear (and was brought up during the presentation) was that it was a bit difficult to tell how this connects with the targeted problem space. In addition, during our feedback, someone brought up that a participant thought there was a lot of value in subjective tasks (creativity, potential for praise, etc.) - would this be something that's valuable to include in the story leading up to your POV, or even hint at with the POV itself? Lastly a word of caution: “no-work-added avenue” feels like a very large space! I get that it's broad for brainstorming purposes, but just keep in mind during your brainstorming about the time remaining to work on it for the quarter. Great organization of slides and using bolds to highlight key phrases/words in the later half of slides!"
   const {classes } = useStyles();
+  const [highlightColor, setHighlightColor] = useState('yellow')
   
   const gatherOpenAIData = async(feedback, type) => {
     var prompt = ""; 
@@ -143,10 +146,11 @@ const App = () => {
   const [originalFb, setOriginalFb] = useState(feedback);
   const [actionItemData, setActionItemData] = useState(actionItemList);
   const [goodBadListData, setGoodBadListData] = useState(goodBadList); 
+  const [feedb, setFeedb] = useState(originalFb);
+  const [highlighted, setHighlighted] = useState("")
 
-  // using UseEffect here is necessary to avoid calling the API every time react re-renders 
-  // This function calls the function that calls the openAI API and sets the variables for the feedback
   useEffect(() => {
+  
     const fetchData = async () => {
       try {
         var data = await gatherOpenAIData(feedback, "action");
@@ -160,8 +164,22 @@ const App = () => {
     // Call the fetchData function only once when the component mounts
     // fetchData();
   }, []);
+
+  useEffect(() => {
+    let updatedFb = originalFb;
+    if(highlighted && highlighted != "") {
+      const regex = new RegExp(highlighted.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      updatedFb = updatedFb.replace(regex, match => `<mark style="background: ${highlightColor}">${match}</mark>`);
+    }
+    setFeedb(updatedFb)
+
+  }, [highlighted]);
+
+  const handleMouseOverKey = (value) => {
+    setHighlighted(value);
+  };
   
-  const [feedb, setFeedb] = useState(originalFb);
+
 
   const togglePageActionItems = () => {
     setCurrentPage('Action');
@@ -176,7 +194,7 @@ const App = () => {
       <Box className={classes.container}>
         <Typography className={classes.title} variant="title"><strong className={classes.logo}>PrAIse</strong>: Feedback delivered how you want it</Typography>
         <Box className={classes.highlightedContainer}>
-          <div dangerouslySetInnerHTML={{ __html: feedb }} />
+          <div className='maintext' dangerouslySetInnerHTML={{ __html: feedb }} />
         </Box>
         
         <Box className={classes.buttonContainer}>
@@ -190,8 +208,8 @@ const App = () => {
           </Box>
           <div className={classes.display}>
             {currentPage === 'Home' && <HomePage />}
-            {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} />}
-            {currentPage === 'GoodBad' && <GoodAndBad  itemsList={goodBadListData} originalFb={originalFb} setFeedb={setFeedb} />}
+            {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} setHighlightColor={setHighlightColor} onMouseOverKey={handleMouseOverKey}/>}
+            {currentPage === 'GoodBad' && <GoodAndBad  itemsList={goodBadListData} originalFb={originalFb} setFeedb={setFeedb} setHighlightColor={setHighlightColor} onMouseOverKey={handleMouseOverKey}/>}
           </div>
         </Box>
       </Box>
