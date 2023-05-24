@@ -54,7 +54,6 @@ const useStyles = makeStyles()({
     lineHeight: 1.7,
   },
   maintext: {
-    color: 'lightgrey'
   },
   display: {
     flexGrow:4,
@@ -167,9 +166,11 @@ const App = () => {
 
   useEffect(() => {
     let updatedFb = originalFb;
+    document.getElementById("maintext").style["color"] = "black";
     if(highlighted && highlighted != "") {
       const regex = new RegExp(highlighted.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
       updatedFb = updatedFb.replace(regex, match => `<mark style="background: ${highlightColor}">${match}</mark>`);
+      document.getElementById("maintext").style["color"] = "#c6c6c6";
     }
     setFeedb(updatedFb)
 
@@ -194,7 +195,7 @@ const App = () => {
       <Box className={classes.container}>
         <Typography className={classes.title} variant="title"><strong className={classes.logo}>PrAIse</strong>: Feedback delivered how you want it</Typography>
         <Box className={classes.highlightedContainer}>
-          <div className='maintext' dangerouslySetInnerHTML={{ __html: feedb }} />
+          <div id="maintext" className={classes.maintext} dangerouslySetInnerHTML={{ __html: feedb }} />
         </Box>
         
         <Box className={classes.buttonContainer}>
