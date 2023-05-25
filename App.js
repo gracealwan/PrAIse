@@ -167,8 +167,11 @@ const App = () => {
     document.getElementById("maintext").style["color"] = "black";
     if(highlighted && highlighted != "") {
       const regex = new RegExp(highlighted.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-      updatedFb = updatedFb.replace(regex, match => `<mark style="background: ${highlightColor}">${match}</mark>`);
-      document.getElementById("maintext").style["color"] = "#c6c6c6";
+      updatedFb = updatedFb.replace(regex, match => `<mark style="background: ${highlightColor}" transition: 'color 1s'>${match}</mark>`);
+      // document.getElementById("maintext").style["color"] = "#c6c6c6";
+      const element = document.getElementById("maintext");
+      element.style.transition = "color 2s";
+      element.style.color = "#c6c6c6";
     }
     setFeedb(updatedFb)
 
