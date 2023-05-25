@@ -17,6 +17,7 @@ const useStyles = makeStyles()({
   headercontainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginRight: 80,
     alignItems: 'center',
     flex:7
   },
@@ -38,9 +39,11 @@ const useStyles = makeStyles()({
    },
   },
   header: {
+    marginLeft: 80,
     marginRight: 20,
     marginBottom: 20,
     marginTop: 20,
+
   },
   actioncontainer: {
     flex:4
@@ -108,16 +111,18 @@ const ActionItems = (props) => {
         <Box className={classes.headercontainer}>
           <Typography className={classes.header} variant='h4'>Action Items</Typography>
           <ToggleButtonGroup
+            
             value={alignment}
+            fullWidth="1"
             exclusive
             onChange={(event, value) => {if (value != null) setAlignment(value)}}
             aria-label="text alignment"
           >
             <ToggleButton value="left" aria-label="left aligned">
-              Creative
+              When you're feeling creative
             </ToggleButton>
             <ToggleButton value="right" aria-label="right aligned">
-              Objective
+              When you're not
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>
@@ -125,14 +130,14 @@ const ActionItems = (props) => {
         <Box className={classes.actioncontainer}>
 
             {(alignment == "left" || alignment == "center") && <Box className={classes.column}  >
-                <Typography variant='h6'>Creative</Typography>
+                <Typography variant='h6'>Tasks for when you're feeling creative</Typography>
                 <ul>
                 {Object.entries(creativeList).map(([key, value],i) => <li key={i} onMouseOut={() => handleMouseOver(null)} onMouseOver={() => handleMouseOver(i)} className={classes.listItem}>{value}</li>)}
                 </ul>
             </Box>}
       
             {(alignment == "right" || alignment == "center") && <Box className={classes.column}>
-                <Typography variant='h6'>Objective</Typography>
+                <Typography variant='h6'>Tasks for when you're feeling less creative</Typography>
                 <ul>
                   {Object.entries(objList).map(([key, value],i) => <li key={i} onMouseOut={() => handleMouseOver(null)} onMouseOver={() => handleMouseOver(i)} className={classes.listItem}>{value}</li>)}
                 </ul>
