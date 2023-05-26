@@ -53,6 +53,8 @@ const useStyles = makeStyles()({
     fontFamily: 'sans-serif',
     lineHeight: 1.7,
   },
+  maintext: {
+  },
   display: {
     flexGrow:4,
   }
@@ -62,17 +64,17 @@ const useStyles = makeStyles()({
 const App = () => {
   const token = jsonData.openAI; 
   const [currentPage, setCurrentPage] = useState('Home');
-  const [text, setText] = useState("Default feedback");
   const [openAIfinished, setOpenAIfinished] = useState(true);
-  const feedback = "I really liked how you walked us through your analysis. There are several interesting themes that you've uncovered that could either motivate your project or be used as guidelines. For scoping, I might recommend focusing on the most interesting one you'd like to explore further and revisiting the others to see how they might inform designs about this focus. Nice job gathering the perspectives and experiences from two users on challenges in the workplace! We did notice that both of your participants were PMs who joined the company recently. Totally understand that it's hard to recruit users in this space, so instead, it's a good idea to also include some sort of explicit reflection on how that might have shaped your needfinding. Not sure if being hired recently would affect things, but PMs might be especially concerned about progress and feedback, so might scope this as aimed for people who are managing processes or projects. Nice job synthesizing what you learned from each participant! Very clear steps on how your team went from the needfinding notes to the POV, which also surfaced several potential ideas to be brainstormed on. The concepts around direct feedback as well as up-to-date progress are really interesting areas to explore. One thing that didn't feel as clear (and was brought up during the presentation) was that it was a bit difficult to tell how this connects with the targeted problem space. In addition, during our feedback, someone brought up that a participant thought there was a lot of value in subjective tasks (creativity, potential for praise, etc.) - would this be something that's valuable to include in the story leading up to your POV, or even hint at with the POV itself? Lastly a word of caution: “no-work-added avenue” feels like a very large space! I get that it's broad for brainstorming purposes, but just keep in mind during your brainstorming about the time remaining to work on it for the quarter. Great organization of slides and using bolds to highlight key phrases/words in the later half of slides!"
+  const feedback = "Thanks so much for taking the time to present yesterday. It was really lucky that so many of the directors were able to come watch, and that really speaks to I thought the overall presentation flow was quite good, and the execs seemed excited about the possibility of this product. I really liked how you walked us through your analysis, and nice job synthesizing what you learned from each participant! Some of the organization, especially in between the middle two sections, was hard to follow and the main user frustration was unclear. I could tell that Emma and Josie were getting confused. For the next presentation, let's work on making those main points more clear. Also, we should do some more work on solidifying a name for this product. A name would really help introduce buy-in from the team and may help rally support behind the product. I'm thinking of some type of play on words, something short and punchy. Seems like the slides went over well. Overall, slide design was good and in line with the current branding. Some of the colors used were too light and it was hard to see the table of contents on the agenda slide. We might also want to think about how to reorganize the agenda slide to make it more visually interesting. Also, include slide numbers so that people can more easily refer back to slides in the Q&A portion. For the Q&A, you had strong answers to the branding questions but faltered a bit on the go-to-market strategy. Let's really work on solidifying the go-to-market and anticipating questions that might be asked in the future. Don't be afraid to ask for a minute to think about the question to compose a structured answer or to say that we don't know the answer yet. You could also brainstorm other users we could talk to from different user populations that use this product, since this was mentioned as a hole in user research from Emma. We'll also need to write up a product spec to forward to the development team."
   const {classes } = useStyles();
+  const [highlightColor, setHighlightColor] = useState('yellow')
   
   const gatherOpenAIData = async(feedback, type) => {
     var prompt = ""; 
     if (type == "goodBad") {
-      prompt = `Separate this feedback into one JSON object containing 2 nested JSON objects: one under key “positive” and one under key “negative”. Each object contains positive and negative (corresponding to the key) action items for the employee based on the manager's feedback. Format the actions items as key: value pairs where the original string from the original feedback is the key and the generated action item is the value.`;
+      prompt = `Separate this feedback into one JSON object containing 2 nested JSON objects: one under key “positive” and one under key “negative”. Each object contains positive and negative (corresponding to the key) summary phrases for the employee based on the manager's feedback. Make the feedback points short and to the point and only provide the 3 most important points. Format the summary phrases as key: value pairs where the original string from the original feedback is the key and the generated phrase is the value`;
     } else {
-      prompt = `Separate this feedback into one JSON object containing 2 nested JSON objects: one under key "creative" and one under key "objective". Each object contains creative and non-creative (corresponding to the key) action items for the employee based on the manager's feedback. Format the actions items as key: value pairs where the original string from the original feedback is the key and the generated action item is the value.`;
+      prompt = `Separate this feedback into one JSON object containing 2 nested JSON objects: one under key "creative" and one under key "objective". Each object contains creative and non-creative (corresponding to the key) action items for the employee based on the manager's feedback. Make the action items short and to the point and only provide the 3 most important points. Format the actions items as key: value pairs where the original string from the original feedback is the key and the generated action item is the value.`;
     }
     const question = prompt + " " + feedback; 
     console.log("token: " + token);
@@ -97,6 +99,7 @@ const App = () => {
         });
         const data = await response.json();
         const answer = data.choices[0].message['content'];
+        console.log("answer: " + answer);
         console.log("OpenAI response received for" + type + " type of feedback");
         if (type == 'goodBad') {
           setOpenAIfinished(true);
@@ -110,43 +113,41 @@ const App = () => {
   
   const actionItemList = {
     "creative": {
-      "There are several interesting themes that you've uncovered that could either motivate your project or be used as guidelines. For scoping, I might recommend focusing on the most interesting one you'd like to explore further and revisiting the others to see how they might inform designs about this focus.": "Consider selecting the most interesting theme and exploring it further for the project. Revisit the other themes to identify ways they can inform the design within the chosen focus.",
-      "The concepts around direct feedback as well as up-to-date progress are really interesting areas to explore.": "Further explore the concepts of direct feedback and up-to-date progress as potential areas of focus for your project.",
-      "Someone brought up that a participant thought there was a lot of value in subjective tasks (creativity, potential for praise, etc.) - would this be something that's valuable to include in the story leading up to your POV, or even hint at with the POV itself?": "Consider incorporating the value of subjective tasks, such as creativity and potential for praise, into the story leading up to your Point of View (POV) or even hint at it within the POV itself.",
-      "I get that it's broad for brainstorming purposes, but just keep in mind during your brainstorming about the time remaining to work on it for the quarter.": "When brainstorming, be mindful of the time constraints for the quarter and avoid overly broad ideas that may not be feasible to implement within the given timeframe."
+        "Also, we should do some more work on solidifying a name for this product. A name would really help introduce buy-in from the team and may help rally support behind the product. I'm thinking of some type of play on words, something short and punchy.": "Brainstorm and finalize a creative, short, and punchy name for the product.",
+        "We might also want to think about how to reorganize the agenda slide to make it more visually interesting.": "Consider creative ways to reorganize the agenda slide for more visual appeal.",
+        "You could also brainstorm other users we could talk to from different user populations that use this product, since this was mentioned as a hole in user research from Emma.": "Brainstorm creative ways to reach out to other user populations for more comprehensive user research."
     },
     "objective": {
-      "It's a good idea to also include some sort of explicit reflection on how that might have shaped your needfinding.": "Include explicit reflection on how the fact that both participants were recently hired PMs might have influenced your needfinding.",
-      "Might scope this as aimed for people who are managing processes or projects.": "Consider narrowing the scope to target individuals who manage processes or projects.",
-      "One thing that didn't feel as clear (and was brought up during the presentation) was that it was a bit difficult to tell how this connects with the targeted problem space.": "Ensure clarity on how your findings connect with the targeted problem space.",
-      "“No-work-added avenue” feels like a very large space! Just keep in mind during your brainstorming about the time remaining to work on it for the quarter.": "Consider the feasibility of exploring the broad concept of a 'no-work-added avenue' within the limited timeframe of the quarter.",
-      "Great organization of slides and using bolds to highlight key phrases/words in the later half of slides!": "Continue utilizing effective slide organization techniques and the use of bold text to highlight key phrases/words."
+        "For the Q&A, you had strong answers to the branding questions but faltered a bit on the go-to-market strategy. Let's really work on solidifying the go-to-market and anticipating questions that might be asked in the future.": "Focus on solidifying the go-to-market strategy and anticipating potential questions for Q&A.",
+        "Some of the organization, especially in between the middle two sections, was hard to follow and the main user frustration was unclear.": "Improve organization and clarify user frustrations.",
+        "Include slide numbers so that people can more easily refer back to slides in the Q&A portion.": "Add slide numbers to make it easier for people to refer back to specific slides during Q&A."
     }
   }
 
   const goodBadList = {
     "positive": {
-      "There are several interesting themes that you've uncovered that could either motivate your project or be used as guidelines. For scoping, I might recommend focusing on the most interesting one you'd like to explore further and revisiting the others to see how they might inform designs about this focus.": "Consider selecting the most interesting theme and exploring it further for the project. Revisit the other themes to identify ways they can inform the design within the chosen focus.",
-      "The concepts around direct feedback as well as up-to-date progress are really interesting areas to explore.": "Further explore the concepts of direct feedback and up-to-date progress as potential areas of focus for your project.",
-      "Someone brought up that a participant thought there was a lot of value in subjective tasks (creativity, potential for praise, etc.) - would this be something that's valuable to include in the story leading up to your POV, or even hint at with the POV itself?": "Consider incorporating the value of subjective tasks, such as creativity and potential for praise, into the story leading up to your Point of View (POV) or even hint at it within the POV itself.",
-      "I get that it's broad for brainstorming purposes, but just keep in mind during your brainstorming about the time remaining to work on it for the quarter.": "When brainstorming, be mindful of the time constraints for the quarter and avoid overly broad ideas that may not be feasible to implement within the given timeframe."
+      "Thanks so much for taking the time to present yesterday.": "Great job on the presentation!",
+      "I thought the overall presentation flow was quite good, and the execs seemed excited about the possibility of this product.": "Impressive presentation, and the executives showed enthusiasm!",
+      "I really liked how you walked us through your analysis, and nice job synthesizing what you learned from each participant!": "Excellent analysis and synthesis of participant feedback!"
     },
     "negative": {
-      "It's a good idea to also include some sort of explicit reflection on how that might have shaped your needfinding.": "Include explicit reflection on how the fact that both participants were recently hired PMs might have influenced your needfinding.",
-      "Might scope this as aimed for people who are managing processes or projects.": "Consider narrowing the scope to target individuals who manage processes or projects.",
-      "One thing that didn't feel as clear (and was brought up during the presentation) was that it was a bit difficult to tell how this connects with the targeted problem space.": "Ensure clarity on how your findings connect with the targeted problem space.",
-      "“No-work-added avenue” feels like a very large space! Just keep in mind during your brainstorming about the time remaining to work on it for the quarter.": "Consider the feasibility of exploring the broad concept of a 'no-work-added avenue' within the limited timeframe of the quarter.",
-      "Great organization of slides and using bolds to highlight key phrases/words in the later half of slides!": "Continue utilizing effective slide organization techniques and the use of bold text to highlight key phrases/words."
+      "Some of the organization, especially in between the middle two sections, was hard to follow and the main user frustration was unclear. I could tell that Emma and Josie were getting confused.": "Improve organization and clarity in the middle sections for better audience understanding.",
+      "For the next presentation, let's work on making those main points more clear. Also, we should do some more work on solidifying a name for this product. A name would really help introduce buy-in from the team and may help rally support behind the product. I'm thinking of some type of play on words, something short and punchy.": "Enhance clarity of main points, brainstorm catchy name ideas for product, and seek team buy-in.",
+      "Seems like the slides went over well. Overall, slide design was good and in line with the current branding. Some of the colors used were too light and it was hard to see the table of contents on the agenda slide. We might also want to think about how to reorganize the agenda slide to make it more visually interesting. Also, include slide numbers so that people can more easily refer back to slides in the Q&A portion.": "Slides were generally effective, but consider improving color visibility, reorganizing agenda slide for better visual appeal, and adding slide numbers for reference.",
+      "For the Q&A, you had strong answers to the branding questions but faltered a bit on the go-to-market strategy. Let's really work on solidifying the go-to-market and anticipating questions that might be asked in the future. Don't be afraid to ask for a minute to think about the question to compose a structured answer or to say that we don't know the answer yet.": "Strengthen go-to-market strategy, prepare for future questions, and be confident in requesting time to think or admitting when information is not yet available.",
+      "You could also brainstorm other users we could talk to from different user populations that use this product, since this was mentioned as a hole in user research from Emma.": "Consider exploring additional user populations for comprehensive user research.",
+      "We'll also need to write up a product spec to forward to the development team.": "Please prepare a product specification document for the development team."
     }
   }
 
   const [originalFb, setOriginalFb] = useState(feedback);
   const [actionItemData, setActionItemData] = useState(actionItemList);
   const [goodBadListData, setGoodBadListData] = useState(goodBadList); 
+  const [feedb, setFeedb] = useState(originalFb);
+  const [highlighted, setHighlighted] = useState("")
 
-  // using UseEffect here is necessary to avoid calling the API every time react re-renders 
-  // This function calls the function that calls the openAI API and sets the variables for the feedback
   useEffect(() => {
+  
     const fetchData = async () => {
       try {
         var data = await gatherOpenAIData(feedback, "action");
@@ -158,10 +159,29 @@ const App = () => {
       }
     };
     // Call the fetchData function only once when the component mounts
-    // fetchData();
+    //fetchData();
   }, []);
+
+  useEffect(() => {
+    let updatedFb = originalFb;
+    document.getElementById("maintext").style["color"] = "black";
+    if(highlighted && highlighted != "") {
+      const regex = new RegExp(highlighted.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      updatedFb = updatedFb.replace(regex, match => `<mark style="background: ${highlightColor}" transition: 'color 1s'>${match}</mark>`);
+      // document.getElementById("maintext").style["color"] = "#c6c6c6";
+      const element = document.getElementById("maintext");
+      element.style.transition = "color 2s";
+      element.style.color = "#c6c6c6";
+    }
+    setFeedb(updatedFb)
+
+  }, [highlighted]);
+
+  const handleMouseOverKey = (value) => {
+    setHighlighted(value);
+  };
   
-  const [feedb, setFeedb] = useState(originalFb);
+
 
   const togglePageActionItems = () => {
     setCurrentPage('Action');
@@ -176,22 +196,21 @@ const App = () => {
       <Box className={classes.container}>
         <Typography className={classes.title} variant="title"><strong className={classes.logo}>PrAIse</strong>: Feedback delivered how you want it</Typography>
         <Box className={classes.highlightedContainer}>
-          <div dangerouslySetInnerHTML={{ __html: feedb }} />
+          <div id="maintext" className={classes.maintext} dangerouslySetInnerHTML={{ __html: feedb }} />
         </Box>
         
         <Box className={classes.buttonContainer}>
           <Box className={classes.buttons}>
             <ToggleButton disabled={openAIfinished} handleClick={async () => {
               togglePageActionItems();
-              
             }
             } name={"Generate Action Items"} />
             <ToggleButton disabled={openAIfinished} handleClick={togglePageGoodAndBad} name={"Give me the main points"} />
           </Box>
           <div className={classes.display}>
             {currentPage === 'Home' && <HomePage />}
-            {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} />}
-            {currentPage === 'GoodBad' && <GoodAndBad  itemsList={goodBadListData} originalFb={originalFb} setFeedb={setFeedb} />}
+            {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} setHighlightColor={setHighlightColor} onMouseOverKey={handleMouseOverKey}/>}
+            {currentPage === 'GoodBad' && <GoodAndBad  itemsList={goodBadListData} originalFb={originalFb} setFeedb={setFeedb} setHighlightColor={setHighlightColor} onMouseOverKey={handleMouseOverKey}/>}
           </div>
         </Box>
       </Box>

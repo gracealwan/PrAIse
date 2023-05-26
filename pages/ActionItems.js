@@ -17,6 +17,7 @@ const useStyles = makeStyles()({
   headercontainer: {
     display: 'flex',
     flexDirection: 'row',
+    marginRight: 80,
     alignItems: 'center',
     flex:7
   },
@@ -32,33 +33,24 @@ const useStyles = makeStyles()({
     fontFamily: 'sans-serif',
   },
   listItem: {
-    marginBottom: 10
+    marginBottom: 10,
+    '&:hover': {
+      fontWeight: "bold",
+   },
   },
   header: {
+    marginLeft: 80,
     marginRight: 20,
     marginBottom: 20,
     marginTop: 20,
+
   },
   actioncontainer: {
     flex:4
-  }
+  },
+
 
 });
-
-
-
-function generatePastelColors(count, color1, color2) {
-  const startColor = tinycolor(color1);
-  const endColor = tinycolor(color2);
-  const colorRange = [];
-
-  for (let i = 0; i <= count; i++) {
-    const color = tinycolor.mix(startColor, endColor, i * (100 / count));
-    colorRange.push(color.toHexString());
-  }
-
-  return colorRange;
-}
 
 function generateColorsArray(count, type) {
   const colorRange = [];
@@ -90,48 +82,28 @@ function generateColorsArray(count, type) {
 
 const ActionItems = (props) => {
   const {classes } = useStyles();
-  const [creativeList, setCreativeList] = useState(Object.values(props.itemsList['creative']));
-  const [objList, setObjList] = useState(Object.values(props.itemsList['objective']));
   const [alignment, setAlignment] = useState('left');
 
-  function highlightSubstring(fb, textList, color1, color2, listType) {
-    let updatedFb = fb;
-    // const colors = generatePastelColors(textList.length, color1, color2);
-    const colors = generateColorsArray(textList.length, listType); 
-    textList.forEach((searchString, i) => {
-      const regex = new RegExp(searchString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-      updatedFb = updatedFb.replace(regex, match => `<mark style="background:${colors[i]}"><strong>${match}</strong></mark>`);
-    });
-    let list = listType == "creative"? creativeList : objList;
-    let newList = list.map((item,i) => <mark style={{background:colors[i]}}>{item}</mark>)
-    listType == "creative"? setCreativeList(newList):setObjList(newList);
-    return updatedFb;
-  }
+  const creativeList = props.itemsList['creative'];
+  const objList = props.itemsList['objective'];
 
-  function highlightSection(reset, type, _feedback) {
-    let feedbackToDisplay = _feedback ? _feedback :props.originalFb;
-    let updatedFb = "";
-    if (type == "creative") {
+  const handleMouseOver = (key) => {
+    if(key == 'null') {
+      props.onMouseOverKey("");
+      props.setHighlightColor("white")
+    }
+    if (alignment == 'left') {
+      const colors = generateColorsArray(6, 'creative')
+      props.setHighlightColor(colors[key%6])
+      props.onMouseOverKey(Object.keys(creativeList)[key]);
+    }
+    else if (alignment == 'right') {
+      const colors = generateColorsArray(6, 'objective')
+      props.setHighlightColor(colors[key%6])
+      props.onMouseOverKey(Object.keys(objList)[key]);
+    }
     
-      updatedFb = highlightSubstring(feedbackToDisplay, Object.keys(props.itemsList['creative']),'#FCC981', "#FEEBD0" , type)
-    }
-    else if(type == "objective"){
-      updatedFb = highlightSubstring(feedbackToDisplay, Object.keys(props.itemsList['objective']),'#AE99BE', "#EBE5EF", type)
-    }
-    props.setFeedb(updatedFb);
-    return updatedFb;
-  }
-
-  useEffect(() => {
-    if(alignment == 'center') {
-      let updatedFb = highlightSection(false, "creative");
-      highlightSection(false, "objective", updatedFb);
-    }
-    else {
-      highlightSection(true, alignment == 'left'? "creative":"objective");
-    }
-      
-  }, [alignment]);
+  };
 
   return (
         
@@ -139,19 +111,18 @@ const ActionItems = (props) => {
         <Box className={classes.headercontainer}>
           <Typography className={classes.header} variant='h4'>Action Items</Typography>
           <ToggleButtonGroup
+            
             value={alignment}
+            fullWidth="1"
             exclusive
             onChange={(event, value) => {if (value != null) setAlignment(value)}}
             aria-label="text alignment"
           >
             <ToggleButton value="left" aria-label="left aligned">
-              Creative
+              When you're feeling creative
             </ToggleButton>
-            {/* <ToggleButton value="center" aria-label="centered">
-              All
-            </ToggleButton> */}
             <ToggleButton value="right" aria-label="right aligned">
-              Objective
+              When you're not
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>
@@ -159,16 +130,16 @@ const ActionItems = (props) => {
         <Box className={classes.actioncontainer}>
 
             {(alignment == "left" || alignment == "center") && <Box className={classes.column}  >
-                <Typography variant='h6'>Creative</Typography>
+                <Typography variant='h6'>Tasks for when you're feeling creative</Typography>
                 <ul>
-                  {creativeList.map(item => <li className={classes.listItem}>{item}</li>)}
+                {Object.entries(creativeList).map(([key, value],i) => <li key={i} onMouseOut={() => handleMouseOver(null)} onMouseOver={() => handleMouseOver(i)} className={classes.listItem}>{value}</li>)}
                 </ul>
             </Box>}
       
             {(alignment == "right" || alignment == "center") && <Box className={classes.column}>
-                <Typography variant='h6'>Objective</Typography>
+                <Typography variant='h6'>Tasks for when you're feeling less creative</Typography>
                 <ul>
-                  {objList.map(item => <li className={classes.listItem}>{item}</li>)}
+                  {Object.entries(objList).map(([key, value],i) => <li key={i} onMouseOut={() => handleMouseOver(null)} onMouseOver={() => handleMouseOver(i)} className={classes.listItem}>{value}</li>)}
                 </ul>
             </Box>}
         </Box>
