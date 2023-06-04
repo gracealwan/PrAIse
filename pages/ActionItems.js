@@ -59,16 +59,16 @@ function generateColorsArray(count, type) {
   "rgb(241, 150, 112)"];
   if (type == 'creative') {
     options = [
-      "rgb(240, 160, 188)",
-      "rgb(236, 181, 183)",
-      "rgb(221, 205, 239)",
-      "rgb(158, 146, 223)"
+      "rgb(240, 160, 188, 0.7)",
+      "rgb(236, 181, 183, 0.7)",
+      "rgb(221, 205, 239, 0.7)",
+      "rgb(158, 146, 223, 0.7)"
     ];
   } else if (type == 'objective') {
     options = [
-    "rgb(220, 230, 81)",
-    "rgb(162, 216, 118)",
-    "rgb(130, 218, 217)",
+    "rgb(220, 230, 81, 0.7)",
+    "rgb(162, 216, 118, 0.7)",
+    "rgb(130, 218, 217, 0.7)",
     
   ]
   }; 
@@ -119,10 +119,10 @@ const ActionItems = (props) => {
             aria-label="text alignment"
           >
             <ToggleButton value="left" aria-label="left aligned">
-              When you're feeling creative
+              Creative tasks
             </ToggleButton>
             <ToggleButton value="right" aria-label="right aligned">
-              When you're not
+              Serious tasks
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>

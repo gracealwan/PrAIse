@@ -65,7 +65,7 @@ const App = () => {
   const token = jsonData.openAI; 
   const [currentPage, setCurrentPage] = useState('Home');
   const [openAIfinished, setOpenAIfinished] = useState(true);
-  const feedback = "Thanks so much for taking the time to present yesterday. It was really lucky that so many of the directors were able to come watch, and that really speaks to I thought the overall presentation flow was quite good, and the execs seemed excited about the possibility of this product. I really liked how you walked us through your analysis, and nice job synthesizing what you learned from each participant! Some of the organization, especially in between the middle two sections, was hard to follow and the main user frustration was unclear. I could tell that Emma and Josie were getting confused. For the next presentation, let's work on making those main points more clear. Also, we should do some more work on solidifying a name for this product. A name would really help introduce buy-in from the team and may help rally support behind the product. I'm thinking of some type of play on words, something short and punchy. Seems like the slides went over well. Overall, slide design was good and in line with the current branding. Some of the colors used were too light and it was hard to see the table of contents on the agenda slide. We might also want to think about how to reorganize the agenda slide to make it more visually interesting. Also, include slide numbers so that people can more easily refer back to slides in the Q&A portion. For the Q&A, you had strong answers to the branding questions but faltered a bit on the go-to-market strategy. Let's really work on solidifying the go-to-market and anticipating questions that might be asked in the future. Don't be afraid to ask for a minute to think about the question to compose a structured answer or to say that we don't know the answer yet. You could also brainstorm other users we could talk to from different user populations that use this product, since this was mentioned as a hole in user research from Emma. We'll also need to write up a product spec to forward to the development team."
+  const feedback = "Thanks so much for taking the time to present yesterday. It was really lucky that so many of the directors were able to come watch, and that really speaks to your talent. I thought the overall presentation flow was quite good, and the execs seemed excited about the possibility of this product. I really liked how you walked us through your analysis, and nice job synthesizing what you learned from each participant! Some of the organization, especially in between the middle two sections, was hard to follow and the main user frustration was unclear. I could tell that Emma and Josie were getting confused. For the next presentation, let's work on making those main points more clear. Also, we should do some more work on solidifying a name for this product. A name would really help introduce buy-in from the team and may help rally support behind the product. I'm thinking of some type of play on words, something short and punchy. Seems like the slides went over well. Overall, slide design was good and in line with the current branding. Some of the colors used were too light and it was hard to see the table of contents on the agenda slide. We might also want to think about how to reorganize the agenda slide to make it more visually interesting. Also, include slide numbers so that people can more easily refer back to slides in the Q&A portion. For the Q&A, you had strong answers to the branding questions but faltered a bit on the go-to-market strategy. Let's really work on solidifying the go-to-market and anticipating questions that might be asked in the future. Don't be afraid to ask for a minute to think about the question to compose a structured answer or to say that we don't know the answer yet. You could also brainstorm other users we could talk to from different user populations that use this product, since this was mentioned as a hole in user research from Emma. We'll also need to write up a product spec to forward to the development team."
   const {classes } = useStyles();
   const [highlightColor, setHighlightColor] = useState('yellow')
   
@@ -168,7 +168,6 @@ const App = () => {
     if(highlighted && highlighted != "") {
       const regex = new RegExp(highlighted.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
       updatedFb = updatedFb.replace(regex, match => `<mark style="background: ${highlightColor}" transition: 'color 1s'>${match}</mark>`);
-      // document.getElementById("maintext").style["color"] = "#c6c6c6";
       const element = document.getElementById("maintext");
       element.style.transition = "color 2s";
       element.style.color = "#c6c6c6";
@@ -196,16 +195,18 @@ const App = () => {
       <Box className={classes.container}>
         <Typography className={classes.title} variant="title"><strong className={classes.logo}>PrAIse</strong>: Feedback delivered how you want it</Typography>
         <Box className={classes.highlightedContainer}>
+          <h3>Feedback from John Doe in Slack</h3>
           <div id="maintext" className={classes.maintext} dangerouslySetInnerHTML={{ __html: feedb }} />
         </Box>
         
         <Box className={classes.buttonContainer}>
           <Box className={classes.buttons}>
+            
+            <ToggleButton disabled={openAIfinished} handleClick={togglePageGoodAndBad} name={"Give me the main points"} />
             <ToggleButton disabled={openAIfinished} handleClick={async () => {
               togglePageActionItems();
             }
             } name={"Generate Action Items"} />
-            <ToggleButton disabled={openAIfinished} handleClick={togglePageGoodAndBad} name={"Give me the main points"} />
           </Box>
           <div className={classes.display}>
             {currentPage === 'Home' && <HomePage />}
