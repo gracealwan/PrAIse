@@ -132,8 +132,6 @@ const App = () => {
     },
     "negative": {
       "Some of the organization, especially in between the middle two sections, was hard to follow and the main user frustration was unclear. I could tell that Emma and Josie were getting confused.": "Improve organization and clarity in the middle sections for better audience understanding.",
-      "For the next presentation, let's work on making those main points more clear. Also, we should do some more work on solidifying a name for this product. A name would really help introduce buy-in from the team and may help rally support behind the product. I'm thinking of some type of play on words, something short and punchy.": "Enhance clarity of main points, brainstorm catchy name ideas for product, and seek team buy-in.",
-      "Seems like the slides went over well. Overall, slide design was good and in line with the current branding. Some of the colors used were too light and it was hard to see the table of contents on the agenda slide. We might also want to think about how to reorganize the agenda slide to make it more visually interesting. Also, include slide numbers so that people can more easily refer back to slides in the Q&A portion.": "Slides were generally effective, but consider improving color visibility, reorganizing agenda slide for better visual appeal, and adding slide numbers for reference.",
       "For the Q&A, you had strong answers to the branding questions but faltered a bit on the go-to-market strategy. Let's really work on solidifying the go-to-market and anticipating questions that might be asked in the future. Don't be afraid to ask for a minute to think about the question to compose a structured answer or to say that we don't know the answer yet.": "Strengthen go-to-market strategy, prepare for future questions, and be confident in requesting time to think or admitting when information is not yet available.",
       "You could also brainstorm other users we could talk to from different user populations that use this product, since this was mentioned as a hole in user research from Emma.": "Consider exploring additional user populations for comprehensive user research.",
       "We'll also need to write up a product spec to forward to the development team.": "Please prepare a product specification document for the development team."
@@ -210,8 +208,8 @@ const App = () => {
           </Box>
           <div className={classes.display}>
             {currentPage === 'Home' && <HomePage />}
-            {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} setHighlightColor={setHighlightColor} onMouseOverKey={handleMouseOverKey}/>}
             {currentPage === 'GoodBad' && <GoodAndBad  itemsList={goodBadListData} originalFb={originalFb} setFeedb={setFeedb} setHighlightColor={setHighlightColor} onMouseOverKey={handleMouseOverKey}/>}
+            {currentPage === 'Action' && <ActionItems itemsList={actionItemData} originalFb={originalFb} setFeedb={setFeedb} setHighlightColor={setHighlightColor} onMouseOverKey={handleMouseOverKey}/>}
           </div>
         </Box>
       </Box>
